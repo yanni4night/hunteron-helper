@@ -13,17 +13,16 @@
 var pageSize = 100;
 
 function getQueryUrl(start) {
-    return 'http://hd.hunteron.com/api/v1/position/query?_t=' + Date.now() + '&cityId=30101&industryId=101&size=' + pageSize + '&start=' + start;
+    return 'http://hd.hunteron.com/api/v1/position/query?_t=' + Date.now() + '&cityId=30101&industryId=101&size=' +
+        pageSize + '&start=' + start;
 }
 
-function query() {
+function queryJobs(cb) {
     var jobList = [];
 
-    $.getJSON(getQueryUrl(0)).done(function(ret) {
+    $.getJSON(getQueryUrl(0)).done(function (ret) {
         var total = ret.data.total;
         var remainQueries = Math.ceil(total / pageSize) - 1;
-
-        console.log('remainQueries:%d', remainQueries);
 
         if (ret.data && Array.isArray(ret.data.positions)) {
             jobList = jobList.concat(ret.data.positions);
@@ -34,21 +33,57 @@ function query() {
         for (var i = 0; i < remainQueries; ++i) {
             queries.push($.getJSON(getQueryUrl((1 + i) * pageSize)));
         }
-        $.when.apply($, queries).done(function() {
-            Array.prototype.map.call(arguments, function(rets) {
+        $.when.apply($, queries).done(function () {
+            Array.prototype.map.call(arguments, function (rets) {
                 var ret = rets[0];
                 if (ret.data && Array.isArray(ret.data.positions)) {
                     jobList = jobList.concat(ret.data.positions);
                 }
             });
-            console.log(jobList.filter(function(pos) {
+            var finalJobs = jobList.filter(function (pos) {
                 return pos.positionType != 0 || pos.applyStatus === 1;
-            }));
+            });
+
+            cb(finalJobs);
         });
 
-    }).fail(function() {
+    }).fail(function () {
         console.log('fail');
     });
 }
 
-$('button').click(query);
+function queryJobDetail(jobIds) {
+    var promises = jobIds.map(function (id) {
+        return new Promise(function (resolve) {
+            $.getJSON('http://hd.hunteron.com/api/v1/position/detail?_t=' + Date.now() + '&positionId=' +
+                id).done(function (data) {
+                resolve(data);
+            });
+        });
+    });
+
+    return Promise.all(promises);
+}
+
+$('button').click(function () {
+    new Promise(function (resolve) {
+        queryJobs(function (jobs) {
+            resolve(jobs.map(function (item) {
+                return item.positionId;
+            }).slice(0, 5));
+        });
+    }).then(function (jobIds) {
+        return queryJobDetail(jobIds);
+    }).then(function (data) {
+        var positions = data.map(function (item) {
+            return item.data.position;
+        }).forEach(function (item, idx) {
+            $('<tr><td>' + (idx + 1) + '</td><td>' + item.positionTitle + '</td></tr>').appendTo(
+                $('tbody'));
+        });
+
+    }).catch(function (e) {
+        alert(e.message);
+    });
+
+});
