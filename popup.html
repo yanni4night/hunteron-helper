@@ -2,21 +2,55 @@
 <html>
     <head>
         <meta charset="utf-8"/>
-        <title>Demo</title>
+        <title>Hunteron</title>
+        <link rel="stylesheet" href="styles/semantic.min.css">
+        <script src="scripts/libs/jquery-2.1.4.min.js"></script>
+        <script src="scripts/libs/semantic.min.js"></script>
         <style type="text/css"></style>
     </head>
     <body>
     <a href="http://www.hunteron.com/" target="_blank">猎上网</a>
         <button>Query</button>
-        <table>
-            <thead>
-            <tr>
-                <td>序号</td>
-                <td>职位名</td>
-            </tr></thead>
-            <tbody></tbody>
-        </table>
+        <table class="ui celled table">
+  <thead>
+    <tr>
+        <th>No</th>
+    <th>Title</th>
+    <th>Description</th>
+    <th>Requirement</th>
+  </tr></thead>
+  <tbody>
+    
+  </tbody>
+</table>
+
+<!--Modal dialog-->
+<div class="ui basic modal">
+  <i class="close icon"></i>
+  <div class="header">
+    Archive Old Messages
+  </div>
+  <div class="image content">
+    <div class="image">
+      <i class="warning sign icon"></i>
+    </div>
+    <!-- <div class="description">
+      <p>Your inbox is getting full, would you like us to enable automatic archiving of old messages?</p>
+    </div> -->
+  </div>
+  <div class="actions">
+    <div class="two fluid ui inverted buttons">
+      <div class="ui red basic inverted button">
+        <i class="checkmark icon"></i>
+        Sure
+      </div>
+      <!-- <div class="ui green basic inverted button">
+        <i class="checkmark icon"></i>
+        Yes
+      </div> -->
+    </div>
+  </div>
+</div>
     </body>
-    <script src="scripts/libs/jquery-2.1.4.min.js"></script>
     <script src="scripts/popup.js"></script>
 </html>
