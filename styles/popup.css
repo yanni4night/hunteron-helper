@@ -1,0 +1,39 @@
+/**
+  * Copyright (C) 2014 yanni4night.com
+  * popup.css
+  *
+  * changelog
+  * 2015-12-24[23:15:38]:revised
+  *
+  * @author yanni4night@gmail.com
+  * @version 0.1.0
+  * @since 0.1.0
+  */
+.clearfix::after {
+    content: '';
+    clear: both;
+    font-size: 0;
+    height: 0;
+    display: block;
+}
+.info-block {
+    width: 800px;
+}
+.info-block .item {
+    width: 50%;
+    float: left;
+    height: 24px;
+    line-height: 24px;
+    text-indent: 2em;
+}
+.text {
+  font-size: 14px;
+}
+.article {
+  padding: 2em;
+}
+
+.cv {
+  border: 1px solid #ccc;
+  margin: 10px 0;
+}
