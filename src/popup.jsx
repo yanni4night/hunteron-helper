@@ -114,14 +114,15 @@ var BasicInfo = React.createClass({
     render: function () {
         var annualSalary = this.props.item.minShowAnnualSalary+"~"+this.props.item.maxShowAnnualSalary;
         return (
-            <div className="info-block clearfix">
+            <fieldset className="info-block clearfix">
+                <legend>基本信息</legend>
                 <ItemInfo keyName="预计年薪" value={annualSalary}></ItemInfo>
                 <ItemInfo keyName="所在地" value={this.props.item.location}></ItemInfo>
                 <ItemInfo keyName="汇报对象" value={this.props.item.reportTo}></ItemInfo>
                 <ItemInfo keyName="所属部门" value={this.props.item.department}></ItemInfo>
                 <ItemInfo keyName="招聘人数" value={this.props.item.headCount}></ItemInfo>
                 <ItemInfo keyName="下属团队" value={this.props.item.subordinate}></ItemInfo>
-            </div>
+            </fieldset>
             );
     }
 });
@@ -129,10 +130,11 @@ var BasicInfo = React.createClass({
 var CommissionPolicy = React.createClass({
     render: function () {
         return (
-            <div className="info-block clearfix">
+            <fieldset className="info-block clearfix">
+                <legend>佣金政策</legend>
                 <ItemInfo keyName="佣金比例" value={this.props.item.percentageNumbric}></ItemInfo>                
                 <ItemInfo keyName="保证期" value={this.props.item.guaranteeTime}></ItemInfo>                
-            </div>
+            </fieldset>
             );
     }
 });
@@ -140,9 +142,10 @@ var CommissionPolicy = React.createClass({
 var JobDescription = React.createClass({
     render: function () {
         return (
-            <div className="info-block clearfix">
+            <fieldset className="info-block clearfix">
+                <legend>职位描述</legend>
                 <div className="text article">{this.props.item.jobDescription}</div>
-            </div>
+            </fieldset>
             );
     }
 });
@@ -150,9 +153,10 @@ var JobDescription = React.createClass({
 var JobRequirement = React.createClass({
     render: function () {
         return (
-            <div className="info-block clearfix">
+            <fieldset className="info-block clearfix">
+                <legend>任职要求</legend>
                 <div className="text article">{this.props.item.jobRequirement}</div>
-            </div>
+            </fieldset>
             );
     }
 });
@@ -160,13 +164,14 @@ var JobRequirement = React.createClass({
 var PostRequirement = React.createClass({
     render: function () {
         return (
-            <div className="info-block clearfix">
+            <fieldset className="info-block clearfix">
+                <legend>岗位要求</legend>
                 <ItemInfo keyName="学历" value={this.props.item.degreeRequired}></ItemInfo>
                 <ItemInfo keyName="语言要求" value={this.props.item.languageRequired}></ItemInfo>
                 <ItemInfo keyName="性别" value={this.props.item.genderRequired}></ItemInfo>
                 <ItemInfo keyName="工作年限" value={this.props.item.workExpRequired}></ItemInfo>
                 <ItemInfo keyName="面试流程" value={this.props.item.interviewTimes}></ItemInfo>
-            </div>
+            </fieldset>
             );
     }
 });
@@ -174,9 +179,10 @@ var PostRequirement = React.createClass({
 var ResearchInfo = React.createClass({
     render: function () {
         return (
-            <div className="info-block clearfix">
+            <fieldset className="info-block clearfix">
+                <legend>调研信息</legend>
                 <div className="text article">{this.props.item.importantMsg}</div>
-            </div>
+            </fieldset>
             );
     }
 });
@@ -185,6 +191,7 @@ var Cv = React.createClass({
     render: function () {
         return (
             <div className="cv">
+                <h1>{this.props.item.positionTitle}</h1>
                 <BasicInfo item={this.props.item}></BasicInfo>
                 <CommissionPolicy item={this.props.item}></CommissionPolicy>
                 <JobDescription item={this.props.item}></JobDescription>
