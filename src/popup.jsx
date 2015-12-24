@@ -181,7 +181,7 @@ var ResearchInfo = React.createClass({
         return (
             <fieldset className="info-block clearfix">
                 <legend>调研信息</legend>
-                <div className="text article">{this.props.item.importantMsg}</div>
+                <div className="text article">{this.props.item.importantMsg||'无'}</div>
             </fieldset>
             );
     }
