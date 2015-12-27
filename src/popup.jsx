@@ -165,7 +165,7 @@ var PostRequirement = React.createClass({
 });
 
 var ResearchInfo = React.createClass({
-    rawMarkup: function() {
+    rawMarkup: function () {
         var rawMarkup = this.props.item.importantMsg||'无';
         return { __html: rawMarkup };
     },
@@ -174,6 +174,43 @@ var ResearchInfo = React.createClass({
             <fieldset className="info-block clearfix">
                 <legend>调研信息</legend>
                 <div className="text article" dangerouslySetInnerHTML={this.rawMarkup()} ></div>
+            </fieldset>
+            );
+    }
+});
+
+var EnterpriseInfo = React.createClass({
+    getInitialState: function () {
+        return {info: {}};
+    },
+    componentDidMount: function () {
+        var id = this.props.enterpriseId;
+
+        if (!this.constructor.__cache) {
+            this.constructor.__cache = {};
+        }
+
+        if (id in this.constructor.__cache) {
+            this.setState({
+                info: this.constructor.__cache[id]
+            });
+        } else {
+            $.getJSON('http://hd.hunteron.com/api/v1/enterprise/detail/getById?_t=' + Date.now() + '&enterpriseId=' +
+                id).done(function (ret) {
+                this.setState({
+                    info: ret.data
+                });
+                this.constructor.__cache[id] = ret.data;
+            }.bind(this));
+        }
+    },
+    render: function () {
+         return (
+            <fieldset className="info-block clearfix">
+                <legend>公司信息</legend>
+                <div className="text article">
+                    {this.state.info.introduce}
+                </div>
             </fieldset>
             );
     }
@@ -190,6 +227,7 @@ var Cv = React.createClass({
                 <JobRequirement item={this.props.item}></JobRequirement>
                 <PostRequirement item={this.props.item}></PostRequirement>
                 <ResearchInfo item={this.props.item}></ResearchInfo>
+                <EnterpriseInfo enterpriseId={this.props.item.enterpriseId}></EnterpriseInfo>
             </div>
             );
     }
