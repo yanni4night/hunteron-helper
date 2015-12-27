@@ -1,6 +1,10 @@
 # hunteron-helper
+
+![hunteron](img/logo_icon.png)
+
 Chrome extension for hunteron.com
 
 # dev
 
-    babel --presets react src --watch --out-dir build
+    $make install
+    $make
