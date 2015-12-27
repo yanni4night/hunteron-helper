@@ -44,6 +44,10 @@ html,body{padding: 0;margin: 0;}
   width: 820px;
 }
 
+.cv {
+    page-break-after: always;
+}
+
 nav {
     position: fixed;
     top: 0;
@@ -76,4 +80,8 @@ nav .msg {
     border: 1px dashed #ccc;
     padding: 3px;
     margin-right: 10px;
+}
+
+h1 a {
+    color: #333;
 }
