@@ -197,7 +197,7 @@ var ResearchInfo = React.createClass({
         return (
             <fieldset className="info-block clearfix">
                 <legend>调研信息</legend>
-                <div className="text article" dangerouslySetInnerHTML={this.rawMarkup()} ></div>
+                <div className="text article" contentEditable="true" dangerouslySetInnerHTML={this.rawMarkup()} ></div>
             </fieldset>
             );
     }
