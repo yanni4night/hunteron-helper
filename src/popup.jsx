@@ -74,10 +74,6 @@ function queryJobDetail(id) {
         });
     });
 }
-/*function showError(e) {
-    $('.ui.basic.modal').find('.header').text(e.message).end().modal('show');
-
-}*/
 
 function fetch () {
     return new Promise(function(resolve, reject) {
@@ -157,15 +153,36 @@ var JobRequirement = React.createClass({
 });
 
 var PostRequirement = React.createClass({
+    degreeRequired: function (id) {
+        var e = ["", "本科", "研究生", "硕士", "博士", "博士后", "MBA", "中专", "大专", "初中", "高中"];
+        return e[id] || '';
+    },
+    genderRequired: function (id) {
+        var e = ["女", "男", "不详"];
+        return e[id] || '';
+    }, 
+    workExpRequired: function (id) {
+        var n = {
+            0: "不限年限",
+            1: "1年以上",
+            2: "2年以上",
+            3: "3年以上",
+            4: "4年以上",
+            5: "5年以上",
+            6: "6年以上",
+            7: "7年以上"
+        };
+        return n[id] || ''
+    },
     render: function () {
         return (
             <fieldset className="info-block clearfix">
                 <legend>岗位要求</legend>
-                <ItemInfo keyName="学历" value={this.props.item.degreeRequired}></ItemInfo>
+                <ItemInfo keyName="学历" value={this.degreeRequired(this.props.item.degreeRequired)}></ItemInfo>
                 <ItemInfo keyName="语言要求" value={this.props.item.languageRequired}></ItemInfo>
-                <ItemInfo keyName="性别" value={this.props.item.genderRequired}></ItemInfo>
-                <ItemInfo keyName="工作年限" value={this.props.item.workExpRequired}></ItemInfo>
-                <ItemInfo keyName="面试流程" value={this.props.item.interviewTimes}></ItemInfo>
+                <ItemInfo keyName="性别" value={this.genderRequired(this.props.item.genderRequired)}></ItemInfo>
+                <ItemInfo keyName="工作年限" value={this.workExpRequired(this.props.item.workExpRequired)}></ItemInfo>
+                <ItemInfo keyName="面试流程" value={this.props.item.interviewTimes + '面'}></ItemInfo>
             </fieldset>
             );
     }
