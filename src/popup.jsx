@@ -119,12 +119,16 @@ var CommissionPolicy = React.createClass({
             return '￥' + this.props.item.fixedRewardAmount;
         }
     },
+    guaranteeTime: function () {
+        return this.props.item.guaranteeTime ? this.props.item.guaranteeTime + '个月' : this.props.contract.guaranteeMonths +
+            '个月';
+    },
     render: function () {
         return (
             <fieldset className="info-block clearfix">
                 <legend>佣金政策</legend>
                 <ItemInfo keyName="佣金" value={this.commission()}></ItemInfo>                
-                <ItemInfo keyName="保证期" value={this.props.item.guaranteeTime + '个月'}></ItemInfo>                
+                <ItemInfo keyName="保证期" value={this.guaranteeTime()}></ItemInfo>                
             </fieldset>
             );
     }
@@ -272,7 +276,7 @@ var Cv = React.createClass({
             <div className="cv">
                 <h1>{this.props.item.positionId}:{this.props.item.positionTitle}</h1>
                 <BasicInfo item={this.props.item}></BasicInfo>
-                <CommissionPolicy item={this.props.item}></CommissionPolicy>
+                <CommissionPolicy item={this.props.item} contract={this.props.contract}></CommissionPolicy>
                 <JobDescription item={this.props.item}></JobDescription>
                 <JobRequirement item={this.props.item}></JobRequirement>
                 <PostRequirement item={this.props.item}></PostRequirement>
@@ -286,7 +290,7 @@ var Cv = React.createClass({
 var Page = React.createClass({
     getInitialState: function() {
         return {
-            positions: [],
+            details: [],
             success: 0,
             total: 0,
             failed: 0
@@ -300,7 +304,7 @@ var Page = React.createClass({
             jobIds.forEach(function(id){
                 queryJobDetail(id).then(function(ret){
                     this.setState({
-                        positions: this.state.positions.concat(ret.data.position),
+                        details: this.state.details.concat(ret.data),
                         success: this.state.success + 1,
                     });
                 }.bind(this),function(){
@@ -313,8 +317,8 @@ var Page = React.createClass({
     },
     render: function () {
 
-        var cvs = this.state.positions.map(function(position){
-            return (<Cv item={position}></Cv>);
+        var cvs = this.state.details.map(function(detail){
+            return (<Cv item={detail.position} contract={detail.contract}></Cv>);
         });
 
         return (
