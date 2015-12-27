@@ -66,19 +66,14 @@ function queryJobs(cb) {
     });
 }
 
-function queryJobDetail(jobIds) {
-    var promises = jobIds.map(function(id) {
-        return new Promise(function(resolve) {
-            $.getJSON('http://hd.hunteron.com/api/v1/position/detail?_t=' + Date.now() + '&positionId=' +
-                id).done(function(data) {
-                resolve(data);
-            });
+function queryJobDetail(id) {
+    return new Promise(function (resolve) {
+        $.getJSON('http://hd.hunteron.com/api/v1/position/detail?_t=' + Date.now() + '&positionId=' +
+            id).done(function (data) {
+            resolve(data);
         });
     });
-
-    return Promise.all(promises);
 }
-
 /*function showError(e) {
     $('.ui.basic.modal').find('.header').text(e.message).end().modal('show');
 
@@ -93,13 +88,6 @@ function fetch () {
                 resolve(jobIds);
             }
         });
-    }).then(function(jobIds) {
-        return queryJobDetail(jobIds);
-    }).then(function(data) {
-        var positions = data.map(function(item) {
-            return item.data.position;
-        });
-        return positions;
     });
 }
 
@@ -209,25 +197,43 @@ var Cv = React.createClass({
 
 var Page = React.createClass({
     getInitialState: function() {
-        return {data: []};
+        return {
+            positions: [],
+            success: 0,
+            total: 0,
+            failed: 0
+        };
     },
     componentDidMount: function () {
-        fetch().then(function(positions){
+        fetch().then(function (jobIds) {
             this.setState({
-                data: positions
+                total: jobIds.length
             });
-        }.bind(this)).catch(function(e){
-            alert(e.message);
-        });
+            jobIds.forEach(function(id){
+                queryJobDetail(id).then(function(ret){
+                    this.setState({
+                        positions: this.state.positions.concat(ret.data.position),
+                        success: this.state.success + 1,
+                    });
+                }.bind(this),function(){
+                    this.setState({
+                        failed: this.state.failed + 1
+                    });
+                }.bind(this));
+            }.bind(this));
+        }.bind(this));
     },
     render: function () {
 
-        var cvs = this.state.data.map(function(position){
+        var cvs = this.state.positions.map(function(position){
             return (<Cv item={position}></Cv>);
         });
 
         return (
-            <div>{cvs}</div>
+            <div className="page">
+                <nav>成功：{this.state.success}，失败：{this.state.failed}，总数：{this.state.total}</nav>
+                <div className="content">{cvs}</div>
+            </div>
             );
     }
 });
