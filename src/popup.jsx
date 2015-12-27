@@ -288,12 +288,13 @@ var Cv = React.createClass({
 });
 
 var Page = React.createClass({
-    getInitialState: function() {
+    getInitialState: function () {
         return {
             details: [],
             success: 0,
             total: 0,
-            failed: 0
+            failed: 0,
+            msg: null
         };
     },
     componentDidMount: function () {
@@ -313,6 +314,10 @@ var Page = React.createClass({
                     });
                 }.bind(this));
             }.bind(this));
+        }.bind(this)).catch(function(e){
+            this.setState({
+                msg: e.message
+            });
         }.bind(this));
     },
     render: function () {
@@ -323,7 +328,7 @@ var Page = React.createClass({
 
         return (
             <div className="page">
-                <nav>成功：{this.state.success}，失败：{this.state.failed}，总数：{this.state.total}</nav>
+                <nav>成功：{this.state.success}，失败：{this.state.failed}，总数：{this.state.total}<strong className="msg">{this.state.msg}</strong></nav>
                 <div className="content">{cvs}</div>
             </div>
             );
