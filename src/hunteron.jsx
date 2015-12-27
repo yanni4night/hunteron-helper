@@ -12,27 +12,24 @@
 
 var DEBUG = true;
 
-var pageSize = DEBUG ? 15 : 100;
+var pageSize = 100;
 
-
-
-function getQueryUrl(start) {
+function getQueryUrl(start, ps) {
     return 'http://hd.hunteron.com/api/v1/position/query?_t=' + Date.now() + '&cityId=30101&industryId=101&size=' +
-        pageSize + '&start=' + start;
+        (ps || pageSize) + '&start=' + start;
 }
 
 function queryJobs(cb) {
     var jobList = [];
 
-    $.getJSON(getQueryUrl(0)).done(function(ret) {
+    $.getJSON(getQueryUrl(0, 1)).done(function(ret) {
 
         if (!ret || !ret.success) {
             return cb(new Error(ret && ret.message || '未知错误'));
         }
 
         var total = ret.data.total;
-        var remainQueries = DEBUG ? 0 : Math.ceil(total / pageSize) - 1;
-
+        var remainQueries = DEBUG ? 1 : Math.ceil((total - 1)/ pageSize);
 
 
         if (ret.data && Array.isArray(ret.data.positions)) {
@@ -47,8 +44,14 @@ function queryJobs(cb) {
 
         $.when.apply($, queries).done(function() {
             Array.prototype.map.call(arguments, function(rets) {
-                var ret = rets[0];
-                if (ret.data && Array.isArray(ret.data.positions)) {
+                var ret;
+                if(Array.isArray(rets)){
+                    ret = rets[0];
+                } else {
+                    ret = rets;
+                }
+
+                if (ret && ret.data && Array.isArray(ret.data.positions)) {
                     jobList = jobList.concat(ret.data.positions);
                 }
             });
