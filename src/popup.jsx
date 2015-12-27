@@ -177,11 +177,15 @@ var PostRequirement = React.createClass({
 });
 
 var ResearchInfo = React.createClass({
+    rawMarkup: function() {
+        var rawMarkup = this.props.item.importantMsg||'无';
+        return { __html: rawMarkup };
+    },
     render: function () {
         return (
             <fieldset className="info-block clearfix">
                 <legend>调研信息</legend>
-                <div className="text article">{this.props.item.importantMsg||'无'}</div>
+                <div className="text article" dangerouslySetInnerHTML={this.rawMarkup()} ></div>
             </fieldset>
             );
     }
@@ -212,7 +216,9 @@ var Page = React.createClass({
             this.setState({
                 data: positions
             });
-        }.bind(this));
+        }.bind(this)).catch(function(e){
+            alert(e.message);
+        });
     },
     render: function () {
 

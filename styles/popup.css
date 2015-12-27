@@ -33,6 +33,7 @@
 }
 .article {
   padding: 2em;
+  white-space: pre-line;
 }
 
 .cv {
