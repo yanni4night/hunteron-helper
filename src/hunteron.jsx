@@ -277,7 +277,7 @@ var Cv = React.createClass({
     render: function () {
         return (
             <div className="cv">
-                <h1>{this.props.item.positionId}:{this.props.item.positionTitle}</h1>
+                <h1>{this.props.item.positionId}:<a href={"http://hd.hunteron.com/#/positions/detail/" + this.props.item.positionId} target="_blank">{this.props.item.positionTitle}</a></h1>
                 <BasicInfo item={this.props.item}></BasicInfo>
                 <CommissionPolicy item={this.props.item} contract={this.props.contract}></CommissionPolicy>
                 <JobDescription item={this.props.item}></JobDescription>
