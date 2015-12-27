@@ -204,11 +204,37 @@ var EnterpriseInfo = React.createClass({
             }.bind(this));
         }
     },
+    scale: function (scaleId) {
+        return ["1-49人", "50-99人", "100-499人", "500-999人", "1000-4999人", "5000-9999人", "10000+人"][scaleId] || '';
+    },
+    developStatus: function(developStatusId) {
+        var e = {
+            1: "未融资",
+            2: "天使轮",
+            3: "A轮",
+            4: "B轮",
+            5: "C轮",
+            6: "D轮及以上",
+            7: "上市公司"
+        };
+        return e[developStatusId] || '';
+    },
+    companyNature: function (companyNatureId) {
+        var e = ["外商独资/外企办事处", "国内上市公司", "中外合资", "政府机关", "国有企业", "民企/私营企业", "外企代表处", "其他", "非赢利机构"];
+        return e[companyNatureId] || '';
+    },
     render: function () {
          return (
             <fieldset className="info-block clearfix">
                 <legend>公司信息</legend>
                 <div className="text article">
+                    <h2>{this.state.info.displayName}</h2>
+                    <h6>地址：{this.state.info.address}</h6>
+                    <div className="tags">
+                        <span className="tag">规模：{this.scale(this.state.info.scale)}</span>
+                        <span className="tag">阶段：{this.developStatus(this.state.info.developStatus)}</span>
+                        <span className="tag">性质：{this.companyNature(this.state.info.style)}</span>
+                    </div>
                     {this.state.info.introduce}
                 </div>
             </fieldset>

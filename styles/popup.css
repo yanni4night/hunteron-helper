@@ -52,6 +52,22 @@ nav {
     margin-left: -421px;
     background-color: #fff;
 }
+@media print {
+    nav {
+        display: none;
+    }
+}
 .page {
     padding-top: 30px;
+}
+
+.tags {
+    margin: 10px 0;
+}
+
+.tag {
+    border-radius: 3px;
+    border: 1px dashed #ccc;
+    padding: 3px;
+    margin-right: 10px;
 }
