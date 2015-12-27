@@ -1,6 +1,6 @@
 /**
  * Copyright (C) 2014 yanni4night.com
- * popup.js
+ * hunteron.jsx
  *
  * changelog
  * 2015-12-21[23:58:37]:revised
