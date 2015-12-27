@@ -116,12 +116,19 @@ var BasicInfo = React.createClass({
 });
 
 var CommissionPolicy = React.createClass({
+    commission: function () {
+        if(this.props.item.percentageNumbric) {
+            return this.props.item.percentageNumbric + '%';
+        } else {
+            return '￥' + this.props.item.fixedRewardAmount;
+        }
+    },
     render: function () {
         return (
             <fieldset className="info-block clearfix">
                 <legend>佣金政策</legend>
-                <ItemInfo keyName="佣金比例" value={this.props.item.percentageNumbric}></ItemInfo>                
-                <ItemInfo keyName="保证期" value={this.props.item.guaranteeTime}></ItemInfo>                
+                <ItemInfo keyName="佣金" value={this.commission()}></ItemInfo>                
+                <ItemInfo keyName="保证期" value={this.props.item.guaranteeTime + '个月'}></ItemInfo>                
             </fieldset>
             );
     }
