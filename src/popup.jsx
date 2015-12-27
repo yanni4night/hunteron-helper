@@ -246,7 +246,7 @@ var Cv = React.createClass({
     render: function () {
         return (
             <div className="cv">
-                <h1>{this.props.item.positionTitle}</h1>
+                <h1>{this.props.item.positionId}:{this.props.item.positionTitle}</h1>
                 <BasicInfo item={this.props.item}></BasicInfo>
                 <CommissionPolicy item={this.props.item}></CommissionPolicy>
                 <JobDescription item={this.props.item}></JobDescription>
