@@ -9,6 +9,7 @@
   * @version 0.1.0
   * @since 0.1.0
   */
+html,body{padding: 0;margin: 0;}
 .clearfix::after {
     content: '';
     clear: both;
@@ -41,4 +42,16 @@
   margin: 10px auto;
   padding: 10px;
   width: 820px;
+}
+
+nav {
+    position: fixed;
+    top: 0;
+    left: 50%;
+    margin: 0;
+    margin-left: -421px;
+    background-color: #fff;
+}
+.page {
+    padding-top: 30px;
 }
