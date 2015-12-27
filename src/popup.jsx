@@ -96,7 +96,7 @@ var ItemInfo = React.createClass({
 
 var BasicInfo = React.createClass({
     render: function () {
-        var annualSalary = this.props.item.minShowAnnualSalary+"~"+this.props.item.maxShowAnnualSalary;
+        var annualSalary = '￥' + this.props.item.minShowAnnualSalary+"~￥"+this.props.item.maxShowAnnualSalary;
         return (
             <fieldset className="info-block clearfix">
                 <legend>基本信息</legend>
@@ -104,7 +104,7 @@ var BasicInfo = React.createClass({
                 <ItemInfo keyName="所在地" value={this.props.item.location}></ItemInfo>
                 <ItemInfo keyName="汇报对象" value={this.props.item.reportTo}></ItemInfo>
                 <ItemInfo keyName="所属部门" value={this.props.item.department}></ItemInfo>
-                <ItemInfo keyName="招聘人数" value={this.props.item.headCount}></ItemInfo>
+                <ItemInfo keyName="招聘人数" value={this.props.item.headCount + '人'}></ItemInfo>
                 <ItemInfo keyName="下属团队" value={this.props.item.subordinate}></ItemInfo>
             </fieldset>
             );
