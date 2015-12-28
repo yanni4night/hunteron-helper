@@ -10,7 +10,7 @@
  * @since 0.1.0
  */
 
-var DEBUG = true;
+var DEBUG = false;
 
 var pageSize = 100;
 
@@ -165,7 +165,7 @@ var PostRequirement = React.createClass({
         return e[id] || '';
     },
     genderRequired: function (id) {
-        var e = ["女", "男", "不详"];
+        var e = ["不限", "男", "女"];
         return e[id] || '';
     }, 
     workExpRequired: function (id) {
