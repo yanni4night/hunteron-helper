@@ -331,7 +331,7 @@ var Page = React.createClass({
 
         return (
             <div className="page">
-                <nav>成功：{this.state.success}，失败：{this.state.failed}，总数：{this.state.total}<strong className="msg">{this.state.msg}</strong></nav>
+                <nav>成功：{this.state.success}，失败：{this.state.failed}，总数：{this.state.total}<a href="http://hd.hunteron.com/" className="msg">{this.state.msg}</a></nav>
                 <div className="content">{cvs}</div>
             </div>
             );
