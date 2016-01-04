@@ -302,7 +302,7 @@ var Page = React.createClass({
         };
     },
     _componentDidMount: function (keyword) {
-        fetch(keyword).then(function (jobIds) {console.log(jobIds);
+        fetch(keyword).then(function (jobIds) {
             this.setState({
                 total: jobIds.length
             });
