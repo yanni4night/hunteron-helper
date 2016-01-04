@@ -38,7 +38,7 @@ function queryJobs(cb, keyword) {
 
         var queries = [];
         var startPos = 2;
-        for (var i = 0; i < remainQueries; startPos += (1 + i) * pageSize, ++i) {
+        for (var i = 0; i < remainQueries; startPos += pageSize, ++i) {
             queries.push($.getJSON(getQueryUrl(startPos, pageSize, keyword)));
         }
 
