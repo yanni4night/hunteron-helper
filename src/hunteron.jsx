@@ -14,15 +14,15 @@ var DEBUG = false;
 
 var pageSize = 100;
 
-function getQueryUrl(start, ps) {
+function getQueryUrl(start, ps, keyword) {
     return 'http://hd.hunteron.com/api/v1/position/query?_t=' + Date.now() + '&cityId=30101&industryId=101&size=' +
-        (ps || pageSize) + '&start=' + start;
+        (ps || pageSize) + '&start=' + start + (keyword ? '&query=' + encodeURIComponent(keyword) : '');
 }
 
-function queryJobs(cb) {
+function queryJobs(cb, keyword) {
     var jobList = [];
 
-    $.getJSON(getQueryUrl(0, 1)).done(function(ret) {
+    $.getJSON(getQueryUrl(0, 1, keyword)).done(function(ret) {
 
         if (!ret || !ret.success) {
             return cb(new Error(ret && ret.message || '未知错误'));
@@ -37,13 +37,13 @@ function queryJobs(cb) {
         }
 
         var queries = [];
-
-        for (var i = 0; i < remainQueries; ++i) {
-            queries.push($.getJSON(getQueryUrl((1 + i) * pageSize)));
+        var startPos = 2;
+        for (var i = 0; i < remainQueries; startPos += (1 + i) * pageSize, ++i) {
+            queries.push($.getJSON(getQueryUrl(startPos, pageSize, keyword)));
         }
 
         $.when.apply($, queries).done(function() {
-            Array.prototype.map.call(arguments, function(rets) {
+            Array.prototype.map.call(queries.length > 1 ? arguments : [Array.prototype.slice.call(arguments)], function(rets) {
                 var ret;
                 if(Array.isArray(rets)){
                     ret = rets[0];
@@ -78,7 +78,7 @@ function queryJobDetail(id) {
     });
 }
 
-function fetch () {
+function fetch (keyword) {
     return new Promise(function(resolve, reject) {
         queryJobs(function(err, jobIds) {
             if (err) {
@@ -86,7 +86,7 @@ function fetch () {
             } else {
                 resolve(jobIds);
             }
-        });
+        }, keyword);
     });
 }
 
@@ -291,6 +291,7 @@ var Cv = React.createClass({
 });
 
 var Page = React.createClass({
+    _isSearching: false,
     getInitialState: function () {
         return {
             details: [],
@@ -300,8 +301,8 @@ var Page = React.createClass({
             msg: null
         };
     },
-    componentDidMount: function () {
-        fetch().then(function (jobIds) {
+    _componentDidMount: function (keyword) {
+        fetch(keyword).then(function (jobIds) {console.log(jobIds);
             this.setState({
                 total: jobIds.length
             });
@@ -317,11 +318,21 @@ var Page = React.createClass({
                     });
                 }.bind(this));
             }.bind(this));
-        }.bind(this)).catch(function(e){
+            this._isSearching = false;
+        }.bind(this), function(e){
             this.setState({
                 msg: e.message
             });
+            this._isSearching = false;
         }.bind(this));
+    },
+    onSearch: function (e) {
+        if (this._isSearching) {
+            return;
+        } else {
+            this._isSearching = true;
+            this._componentDidMount(e.target.value);
+        }
     },
     render: function () {
 
@@ -331,7 +342,10 @@ var Page = React.createClass({
 
         return (
             <div className="page">
-                <nav>成功：{this.state.success}，失败：{this.state.failed}，总数：{this.state.total}<a href="http://hd.hunteron.com/" className="msg">{this.state.msg}</a></nav>
+                <nav>成功：{this.state.success}，失败：{this.state.failed}，总数：{this.state.total}
+                    <a href="http://hd.hunteron.com/" className="msg">{this.state.msg}</a>
+                    <input type="text" onBlur={this.onSearch} placeholder="关键词"/>
+                </nav>
                 <div className="content">{cvs}</div>
             </div>
             );
