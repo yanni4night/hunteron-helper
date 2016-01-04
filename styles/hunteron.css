@@ -85,3 +85,7 @@ nav .msg {
 h1 a {
     color: #333;
 }
+
+button.search {
+  margin-left: 10px;
+}

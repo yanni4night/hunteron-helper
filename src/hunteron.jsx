@@ -331,7 +331,7 @@ var Page = React.createClass({
             return;
         } else {
             this._isSearching = true;
-            this._componentDidMount(e.target.value);
+            this._componentDidMount(document.querySelector('#keyword').value);
         }
     },
     render: function () {
@@ -344,7 +344,8 @@ var Page = React.createClass({
             <div className="page">
                 <nav>成功：{this.state.success}，失败：{this.state.failed}，总数：{this.state.total}
                     <a href="http://hd.hunteron.com/" className="msg">{this.state.msg}</a>
-                    <input type="text" onBlur={this.onSearch} placeholder="关键词"/>
+                    <input type="text" id="keyword" placeholder="关键词"/>
+                    <button className="search" onClick={this.onSearch}>搜索</button>
                 </nav>
                 <div className="content">{cvs}</div>
             </div>
