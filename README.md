@@ -4,7 +4,13 @@
 
 Chrome extension for hunteron.com
 
+Fetch jobs in Beijing.
+
+![screenshot](http://ww4.sinaimg.cn/large/801b780ajw1f7hzzwt4ecj20ne0e5wgs.jpg)
+
 # dev
 
-    $make install
-    $make
+```sh
+$make install
+$make watch
+```

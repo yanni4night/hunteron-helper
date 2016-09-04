@@ -4,10 +4,11 @@
  *
  * changelog
  * 2015-12-21[23:58:37]:revised
+ * 2016-09-04[23:34:24]:port to new api
  *
  * @author yanni4night@gmail.com
- * @version 0.1.0
- * @since 0.1.0
+ * @version 1.0.1
+ * @since 1.0.0
  */
 
 var DEBUG = false;
@@ -15,7 +16,7 @@ var DEBUG = false;
 var pageSize = 100;
 
 function getQueryUrl(start, ps, keyword) {
-    return 'http://hd.hunteron.com/api/v1/position/query?_t=' + Date.now() + '&cityId=30101&industryId=101&size=' +
+    return 'http://wa.hunteron.com/api/v1/position/query?_t=' + Date.now() + '&cityId=30101&size=' +
         (ps || pageSize) + '&start=' + start + (keyword ? '&query=' + encodeURIComponent(keyword) : '');
 }
 
@@ -30,7 +31,6 @@ function queryJobs(cb, keyword) {
 
         var total = ret.data.total;
         var remainQueries = DEBUG ? 1 : Math.ceil((total - 1)/ pageSize);
-
 
         if (ret.data && Array.isArray(ret.data.positions)) {
             jobList = jobList.concat(ret.data.positions);
@@ -55,8 +55,11 @@ function queryJobs(cb, keyword) {
                     jobList = jobList.concat(ret.data.positions);
                 }
             });
-            var finalJobs = jobList.filter(function(pos) {
-                return pos.positionType != 0 || pos.applyStatus === 1;
+            var finalJobs = jobList.filter(function(job) {
+                var disableCompanyNames = '腾讯,百度,阿里,友盟,高德,神马,蚂蚁'.split(',');
+                return !disableCompanyNames.some(function(key) {
+                    return ~job.enterpriseName.indexOf(key);
+                });
             }).map(function(item) {
                 return item.positionId;
             });
@@ -71,7 +74,7 @@ function queryJobs(cb, keyword) {
 
 function queryJobDetail(id) {
     return new Promise(function (resolve) {
-        $.getJSON('http://hd.hunteron.com/api/v1/position/detail?_t=' + Date.now() + '&positionId=' +
+        $.getJSON('http://wa.hunteron.com/api/v1/position/detail?_t=' + Date.now() + '&positionId=' +
             id).done(function (data) {
             resolve(data);
         });
@@ -93,7 +96,11 @@ function fetch (keyword) {
 
 var ItemInfo = React.createClass({
     render: function () {
-        return (<div className="item text">{this.props.keyName}：{this.props.value}</div>);
+        var classNames = ['item', 'text'];
+        if ('extraClass' in this.props) {
+            classNames.push(this.props.extraClass);
+        }
+        return (<div className={classNames.join(' ')}>{this.props.keyName}：{this.props.value}</div>);
     }
 });
 
@@ -130,7 +137,7 @@ var CommissionPolicy = React.createClass({
         return (
             <fieldset className="info-block clearfix">
                 <legend>佣金政策</legend>
-                <ItemInfo keyName="佣金" value={this.commission()}></ItemInfo>                
+                <ItemInfo keyName="佣金" extraClass='hide' value={this.commission()}></ItemInfo>                
                 <ItemInfo keyName="保证期" value={this.guaranteeTime()}></ItemInfo>                
             </fieldset>
             );
@@ -226,7 +233,7 @@ var EnterpriseInfo = React.createClass({
                 info: this.constructor.__cache[id]
             });
         } else {
-            $.getJSON('http://hd.hunteron.com/api/v1/enterprise/detail/getById?_t=' + Date.now() + '&enterpriseId=' +
+            $.getJSON('http://wa.hunteron.com/api/v1/enterprise/detail/getById?_t=' + Date.now() + '&enterpriseId=' +
                 id).done(function (ret) {
                 this.setState({
                     info: ret.data
@@ -302,6 +309,7 @@ var Page = React.createClass({
         };
     },
     _componentDidMount: function (keyword) {
+        document.title = keyword;
         fetch(keyword).then(function (jobIds) {
             this.setState({
                 total: jobIds.length
@@ -331,11 +339,10 @@ var Page = React.createClass({
             return;
         } else {
             this._isSearching = true;
-            this._componentDidMount(document.querySelector('#keyword').value);
+            this._componentDidMount(this.refs.keyword.value.trim());
         }
     },
     render: function () {
-
         var cvs = this.state.details.map(function(detail){
             return (<Cv item={detail.position} contract={detail.contract}></Cv>);
         });
@@ -344,8 +351,8 @@ var Page = React.createClass({
             <div className="page">
                 <nav>成功：{this.state.success}，失败：{this.state.failed}，总数：{this.state.total}
                     <a href="http://hd.hunteron.com/" className="msg">{this.state.msg}</a>
-                    <input type="text" id="keyword" placeholder="关键词"/>
-                    <button className="search" onClick={this.onSearch}>搜索</button>
+                    <input type="text" id="keyword" ref="keyword" placeholder="关键词"/>
+                    <button className="search" onClick={this.onSearch.bind(this)}>搜索</button>
                 </nav>
                 <div className="content">{cvs}</div>
             </div>

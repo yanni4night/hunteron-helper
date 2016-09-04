@@ -10,6 +10,9 @@
   * @since 0.1.0
   */
 html,body{padding: 0;margin: 0;}
+.hide {
+  display: none !important;
+}
 .clearfix::after {
     content: '';
     clear: both;
@@ -28,6 +31,8 @@ html,body{padding: 0;margin: 0;}
     height: 24px;
     line-height: 24px;
     text-indent: 2em;
+    text-overflow: ellipsis;
+    white-space: nowrap;
 }
 .text {
   font-size: 14px;

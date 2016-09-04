@@ -2,7 +2,7 @@
     "manifest_version": 2,
     "name": "猎上网助手",
     "description": "Helper for hunteron.com",
-    "version": "1.0.0",
+    "version": "1.0.1",
     "permissions": [
         "http://*.hunteron.com/",
         "https://*.hunteron.com/",
